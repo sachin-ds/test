@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script>
+var conn = new WebSocket('ws://localhost:8080');
+conn.onopen = function(e) {
+    console.log("Connection established!");
+};
+
+conn.onmessage = function(e) {
+    document.getElementById('test').innerHTML += '<p class="receiver">'+e.data+'</p>';
+};
+
+function sendMessage(){
+	var message = document.getElementById('msg').value;
+	document.getElementById('msg').value = '';
+	document.getElementById('msg').focus();
+	document.getElementById('test').innerHTML += '<p class="sender">'+message+'</p>';
+	conn.send(message);
+	return false;
+}
+</script>
+<style type="text/css">
+	.sender{
+		border:1px solid #aaa; padding:5px 10px; border-radius:3px; background:cyan; margin:5px 0px;text-align: right;
+	}
+
+	.receiver{
+		border:1px solid #aaa; padding:5px 10px; border-radius:3px; background:skyblue; margin:5px 0px;
+	}
+
+</style>
+</head>
+<body>
+
+<div id="test" style="width:400px; padding:20px; border:1px solid #ccc; border-radius:3px;">
+
+</div><br>
+<form action="" onsubmit="return sendMessage()">
+<input type="text" id="msg" style="height:60px; width:350px;">
+<input type="submit" name="send" id="send" style="height:70px;" value="Send">
+</form>
+</body>
+</html>
